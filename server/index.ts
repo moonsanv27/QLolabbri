@@ -16,7 +16,10 @@ const production =
   process.env.NODE_ENV === "production" ||
   process.argv.includes("--production");
 const port = Number(process.env.PORT || 4173);
-const origin = process.env.APP_ORIGIN || `http://127.0.0.1:${port}`;
+const origin =
+  process.env.APP_ORIGIN ||
+  process.env.RENDER_EXTERNAL_URL ||
+  `http://127.0.0.1:${port}`;
 if (
   production &&
   (!process.env.SUPABASE_URL ||
@@ -87,7 +90,7 @@ if (production) {
   });
   app.use(vite.middlewares);
 }
-server.listen(port, "127.0.0.1", () => {
+server.listen(port, production ? "0.0.0.0" : "127.0.0.1", () => {
   console.log(`Nusa Corporate: ${origin}`);
   console.log(
     supabase
